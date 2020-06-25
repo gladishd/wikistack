@@ -13,13 +13,16 @@ const db = new Sequelize('postgres://localhost:5432/wikistack', {
 
 // Where your server and express app are being defined:
 const models = require('./models');
-models.db.sync({ force: true }) // this drops all tables then recreates them based on our JS definitions
+// models.db.sync({ force: true }) // this drops all tables then recreates them based on our JS definitions
+// DON'T sync things twice!
+
+
 // const { Page, User } = models;
 
 app.use('/wiki', wikiRouter);
 // app.use('/user', userRouter);
 app.get("/", (req, res) => {
-    res.redirect("/wiki");
+  res.redirect("/wiki");
 });
 
 // parses url-encoded bodies
@@ -27,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // parses json bodies
 app.use(express.json())
-  
+
 app.use(morgan("dev"));
 app.use(express.static(__dirname + "/public"));
 // const { addPage, editPage, main, userList, userPages, wikiPage } = require("./views/index.js");
@@ -45,28 +48,28 @@ db.authenticate().
   })
 
 const init = async () => {
-    try {
-        /* console.log("ENTERED INIT");
+  try {
+    /* console.log("ENTERED INIT");
 
-        await models.User.sync();
-        console.log("SYNCED USERS");
+    await models.User.sync();
+    console.log("SYNCED USERS");
 
-        await models.Page.sync();
-        console.log("SYNCED PAGE"); */ 
-        await models.db.sync({force:true});
-        app.listen(PORT, () => { // app is name of our app
-            console.log(`Server is listening on port ${PORT}!`);
-          });
-    } catch(err) {
-        // console.log(err);
-    }
+    await models.Page.sync();
+    console.log("SYNCED PAGE"); */
+    await models.db.sync({ force: true });
+    app.listen(PORT, () => { // app is name of our app
+      console.log(`Server is listening on port ${PORT}!`);
+    });
+  } catch (err) {
+    // console.log(err);
+  }
 
 
-    // await models.db.sync();
-    // console.log("SYNCED DB");
+  // await models.db.sync();
+  // console.log("SYNCED DB");
 
   // make sure that you have a PORT constant and to replace the name below with your express app
-  
+
 }
 
 init();
